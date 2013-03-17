@@ -21,9 +21,20 @@ void main() {
 
 	printf("Ball: %s (case 1)\n", strval(testCase(trie, "Ball", case1)));
 	printf("Hi: %s (case 2)\n", strval(testCase(trie, "Hi", case2)));
-	printf("Here: %s (case 3)\n", strval(testCase(trie, "Here", case3)));
+	printf("Here: %s (case 3)\n\n", strval(testCase(trie, "Here", case3)));
 
+	printf("Searching: Ball -- %s\n", strval(searchWord(trie, "Ball")));
+	printf("Deleting: Ball...\n");
 	deleteWord(trie, "Ball");
+	printf("Searching: Ball -- %s\n", strval(searchWord(trie, "Ball")));
+	printf("Searching: Hi -- %s\n", strval(searchWord(trie, "Hi")));
+	printf("Deleting: Hi...\n");
+	deleteWord(trie, "Hi");
+	printf("Searching: Hi -- %s\n", strval(searchWord(trie, "Hi")));
+	printf("Searching: Here -- %s\n", strval(searchWord(trie, "Here")));
+	printf("Deleting: Here...\n");
+	deleteWord(trie, "Here");
+	printf("Searching: Here -- %s\n", strval(searchWord(trie, "Here")));
 
 	trieDelete(trie);
 

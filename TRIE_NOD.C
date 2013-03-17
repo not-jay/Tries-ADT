@@ -64,30 +64,42 @@ Node insertNode(Node node, char c, boolean b) {
 
 	return node->child[node->children - 1];
 }
-
-/* "Sorts" the node->child array so that the proper nodes come first
+/* Algo:
+ * "Sorts" the node->child array so that the proper nodes come first
  * and the NULLs afterward, then trims down the array to the proper size
+ *
+ * Revision:
+ * Instead of using realloc() for trimming, a new array is made and the
+ * proper nodes are transferred.
  */
 void resizeChildren(Node node) {
-	int *nulls, i, count = 0, tmp;
-	Node temp = NULL;
+	int tmp, i, count = 0;
+	Node temp = NULL, *newArray = NULL;
 
+	/* Count number of nulls */
 	for(i = 0; i < node->children; i++) {
-		if(node->child[i] == NULL) {
-			nulls = realloc(nulls, count++);
-			nulls[count - 1] = i;
+		if(node->child[i] == NULL) count++;
+	}
+
+	/* Update counter to reflect the number of proper nodes
+	   and prep newArray. */
+	node->children -= count;
+	newArray = (Node *)calloc(node->children, sizeof(Node));
+
+	/* Add all proper nodes into newArray, since it hasn't been
+	   sorted yet, we'll use node->children+count */
+	for(i = 0, tmp = 0; i < (node->children + count); i++) {
+		if(node->child[i] != NULL) {
+			newArray[tmp] = createNode();
+			newArray[tmp]->c = node->child[i]->c;
+			newArray[tmp]->endMarker = node->child[i]->endMarker;
+			newArray[tmp]->children = node->child[i]->children;
+			newArray[tmp]->child = node->child[i]->child;
+			tmp++;
 		}
 	}
 
-	tmp = count;
-
-	for(i = node->children - 1; count != 0; i--) {
-		temp = node->child[i];
-		node->child[i] = node->child[nulls[count - 1]];
-		node->child[nulls[count--]] = temp;
-	}
-
-	node->children -= tmp;
-
-	node->child = realloc(node->child, node->children);
+	/* Delete the child node and replace it with newArray */
+	freeAndClean(node->child);
+	node->child = newArray;
 }

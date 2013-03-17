@@ -4,7 +4,11 @@
 #include <string.h>
 #include <stdlib.h>
 
-/* Utility Macro */
+/* Utility Macros
+ * Mostly used for assigning a recently free()'d ptr to NULL
+ * Preventing invalid memory location access and thereby preventing
+ * undefined program behavior
+ */
 #define arraysize(A, B) (sizeof(A)/sizeof(B))
 #define nodeDelete(A) deleteNode(A); A = NULL
 #define freeAndClean(A) free(A); A = NULL
