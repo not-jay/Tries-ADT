@@ -1,0 +1,93 @@
+#include "TRIES.H"
+
+Node createNode() {
+	Node node = (Node)calloc(1, sizeof(struct node));
+	node->c = ' ';
+	node->endMarker = false;
+	node->children = 0;
+	node->child = NULL;
+
+	return node;
+}
+
+boolean deleteNode(Node node) {
+	int i;
+
+	if(node->child != NULL) {
+		for(i = 0; i < node->children; i++) {
+			nodeDelete(node->child[i]);
+		}
+		freeAndClean(node->child);
+	}
+
+	freeAndClean(node);
+
+	return true;
+}
+
+int findChildID(Node node, char c) {
+	int i;
+
+	if(node->child == NULL) return -1;
+
+	for(i = 0; i < node->children; i++) {
+		if(node->child[i]->c == c) return i;
+	}
+
+	return -1;
+}
+
+Node findChild(Node node, char c) {
+	int i;
+
+	if(node->child == NULL) return NULL;
+
+	for(i = 0; i < node->children; i++) {
+		if(node->child[i]->c == c) return node->child[i];
+	}
+
+	return NULL;
+}
+
+Node insertNode(Node node, char c, boolean b) {
+	if(node->child != NULL) {
+		node->child = realloc(node->child, sizeof(Node) * (node->children + 1));
+		node->children++;
+	} else {
+		node->child = (struct node **)calloc(1, sizeof(Node));
+		node->children++;
+	}
+
+	node->child[node->children - 1] = createNode();
+	node->child[node->children - 1]->c = c;
+	node->child[node->children - 1]->endMarker = b;
+
+	return node->child[node->children - 1];
+}
+
+/* "Sorts" the node->child array so that the proper nodes come first
+ * and the NULLs afterward, then trims down the array to the proper size
+ */
+void resizeChildren(Node node) {
+	int *nulls, i, count = 0, tmp;
+	Node *temp = NULL;
+
+	for(i = 0; i < node->children; i++) {
+		if(node->child[i] == NULL) {
+			nulls = realloc(nulls, count++);
+			nulls[count - 1] = i;
+		}
+	}
+
+	tmp = count;
+
+	for(i = node->children - 1; count != 0; i--) {
+		temp = node->child[i];
+		node->child[i] = node->child[nulls[count - 1]];
+		node->child[nulls[count--]] = temp;
+	}
+
+	node->children -= tmp;
+
+	node->child = realloc(node->child, node->children);
+}
