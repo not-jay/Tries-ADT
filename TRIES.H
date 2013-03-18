@@ -46,9 +46,11 @@ void addWord(Trie, char *);
 boolean searchWord(Trie, char *);
 void deleteWord(Trie, char *);
 boolean testCase(Trie, char *, DeleteCase);
+char ** getMatchingWords(Node, char *);
 
 /* Misc. (Boolean) functions */
 char * strval(boolean);
 boolean valueof(char *);
+boolean isProperWord(char *);
 
 #endif
