@@ -2,6 +2,7 @@
 
 void main() {
 	Trie trie = createTrie();
+	StringArray array = NULL;
 
 	clrscr();
 
@@ -34,7 +35,11 @@ void main() {
 	printf("Searching: Here -- %s\n", strval(searchWord(trie, "Here")));
 	printf("Deleting: Here...\n");
 	deleteWord(trie, "Here");
-	printf("Searching: Here -- %s\n", strval(searchWord(trie, "Here")));
+	printf("Searching: Here -- %s\n\n", strval(searchWord(trie, "Here")));
+
+	printf("Words in Trie:\n");
+	array = stringSplit(getWords(trie->dummy, ""));
+	printArray(array);
 
 	trieDelete(trie);
 
