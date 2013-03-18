@@ -28,8 +28,14 @@ struct trie {
 	struct node *dummy;
 };
 
+struct stra {
+	char **strings;
+	int size;
+};
+
 typedef struct node *Node;
 typedef struct trie *Trie;
+typedef struct stra *StringArray;
 
 /* Node functions */
 Node createNode();
@@ -38,6 +44,7 @@ int findChildID(Node, char);
 Node findChild(Node, char);
 Node insertNode(Node, char, boolean);
 void resizeChildren(Node);
+char * getWords(Node, char *);
 
 /* Trie functions */
 Trie createTrie();
@@ -46,11 +53,13 @@ void addWord(Trie, char *);
 boolean searchWord(Trie, char *);
 void deleteWord(Trie, char *);
 boolean testCase(Trie, char *, DeleteCase);
-char ** getMatchingWords(Node, char *);
 
 /* Misc. (Boolean) functions */
 char * strval(boolean);
 boolean valueof(char *);
 boolean isProperWord(char *);
+StringArray createStringArray();
+StringArray stringSplit(char *);
+void printArray(StringArray);
 
 #endif
