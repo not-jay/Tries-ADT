@@ -64,6 +64,7 @@ Node insertNode(Node node, char c, boolean b) {
 
 	return node->child[node->children - 1];
 }
+
 /* Algo:
  * "Sorts" the node->child array so that the proper nodes come first
  * and the NULLs afterward, then trims down the array to the proper size
@@ -74,7 +75,7 @@ Node insertNode(Node node, char c, boolean b) {
  */
 void resizeChildren(Node node) {
 	int tmp, i, count = 0;
-	Node temp = NULL, *newArray = NULL;
+	Node *newArray = NULL;
 
 	/* Count number of nulls */
 	for(i = 0; i < node->children; i++) {
@@ -102,4 +103,31 @@ void resizeChildren(Node node) {
 	/* Delete the child node and replace it with newArray */
 	freeAndClean(node->child);
 	node->child = newArray;
+}
+
+/* Creates a string of the node's children separated by a space
+ * It doesn't include the character in the node
+ * ie.
+ * For a tries wi;th the words "Hi" and "Hello"
+ * calling this function getWords(trie->dummy->child[0], "")
+ * would return the string "i ello "
+ * calling the function as getWords(trie->dummy->child[0], "H") however
+ * would return the string "Hi Hello " */
+char * getWords(Node node, char *prefix) {
+	char *words = (char *)calloc(80, sizeof(char));
+	char *temp = (char *)calloc(80, sizeof(char));
+	int i;
+
+	if(node->endMarker) {
+		words = strcat(words, prefix);
+		words = strcat(words, " ");
+	}
+
+	for(i = 0; i < node->children; i++) {
+		temp = strcpy(temp, prefix);
+		temp = strncat(temp, &(node->child[i]->c), 1);
+		words = strcat(words, getWords(node->child[i], temp));
+	}
+
+	return words;
 }
